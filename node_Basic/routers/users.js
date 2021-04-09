@@ -1,28 +1,56 @@
-const express = require('express')
-const router = express.Router()
-const Users = require('../schemas/users')
+const express = require("express");
+const router = express.Router();
+const Users = require("../schemas/users");
+const bcrypt = require("bcrypt");
+const Joi = require("joi");
+const jwt = require("jsonwebtoken");
 
-router.post('/signUp', async(req, res)=> {
-    const {names, nickname, password} = req.body
-    await Users.create({
-        names, nickname, password
-    })
+router.post("/signUp", async (req, res) => {
+  const { names, nickname, password } = req.body;
+  await Users.create({
+    names,
+    nickname,
+    password: bcrypt.hashSync(password, 10),
+  });
 
-    console.log("회원가입 완료")
-})
+  console.log("회원가입 완료");
+});
 
-router.post('/auth', async(req, res)=> {
-    const {nickname, password} = req.body
-    console.log(req.body)
+const postAuthSchema = Joi.object({
+  nickname: Joi.string().required(),
+  password: Joi.string().required(),
+});
 
-    const authFind = await Users.find({nickname, password});
-    console.log(authFind)
+router.post("/auth", async (req, res) => {
+  try {
+    const { nickname, password } = await postAuthSchema.validateAsync(req.body);
 
-    if(authFind.length>0){
-        console.log("로그인 성공")
-    }else{
-        console.log("비밀번호가 틀렸습니다.")
+    const authFind = await Users.findOne({ nickname });
+
+    if (!authFind) {
+      res.status(401).send({
+        errorMessage: "이메일 또는 패스워드가 잘못됐습니다.",
+      });
+      return;
     }
-})
+    const same = bcrypt.compareSync(password, authFind.password);
 
-module.exports = router
+    if (!same) {
+      res.status(401).send({
+        errorMessage: "인증이 잘못되었습니다.",
+      });
+    }
+    
+    const token = jwt.sign({ userId: authFind.userId }, "junhee916");
+    res.send({
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({
+      errorMessage: "요청하 데이터 형식이 올바르지 않습니다.",
+    });
+  }
+});
+
+module.exports = router;

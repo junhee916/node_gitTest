@@ -3,9 +3,6 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose;
 const boardSchema = new Schema({
 
-    title :{
-        type: String,
-    },
     contents : {
         type: String,
     },
