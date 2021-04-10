@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const {Schema} = mongoose;
 const boardSchema = new Schema({
-
+    boardId:{
+        type: Number,
+    },
     contents : {
         type: String,
     },
@@ -11,12 +13,5 @@ const boardSchema = new Schema({
     }
 })
 
-boardSchema.virtual('boardId').get(function () {
-	return this._id.toHexString();
-});
-
-boardSchema.set('toJSON', {
-	virtuals: true
-});
 
 module.exports = mongoose.model("Boards", boardSchema)

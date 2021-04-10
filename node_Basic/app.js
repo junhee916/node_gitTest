@@ -14,9 +14,11 @@ app.use(express.urlencoded({extended:false}))
 
 const userRouter = require('./routers/users')
 const boardRouter = require('./routers/boards')
+const detailRouter = require('./routers/detail')
 
 app.use('/user', [userRouter])
 app.use('/board', [boardRouter])
+app.use('/detail', [detailRouter])
 
 //ejs setting 
 app.set('views', __dirname+'/views');

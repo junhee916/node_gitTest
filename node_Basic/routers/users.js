@@ -33,6 +33,7 @@ router.post("/auth", async (req, res) => {
       });
       return;
     }
+
     const same = bcrypt.compareSync(password, authFind.password);
 
     if (!same) {
@@ -40,17 +41,17 @@ router.post("/auth", async (req, res) => {
         errorMessage: "인증이 잘못되었습니다.",
       });
     }
-    
+
     const token = jwt.sign({ userId: authFind.userId }, "junhee916");
-    res.send({
-      token,
-    });
+ 
+    res.status(201).send({ token: token, })
   } catch (err) {
     console.log(err);
     res.status(400).send({
       errorMessage: "요청하 데이터 형식이 올바르지 않습니다.",
     });
   }
+
 });
 
 module.exports = router;

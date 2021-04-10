@@ -5,12 +5,18 @@ const authMiddleware = require('../auth-Middleware/authMiddleware')
 
 router.post('/writes', authMiddleware, async(req, res)=> {
     let result = {status: 'success'};
-    const user = res.locals.user;
-    console.log(res.locals.user)
+    const {contents} = req.body
+    const user = res.locals.user
+
+    let boardId = await Boards.find({}).sort("-boardId").limit(1); 
+    if (boardId.length == 0) { boardId = 1 } 
+    else { boardId = boardId[0]['boardId'] + 1; }
+
     try{
         await Boards.create({
-            contents: req.body['contents'],
-            nickname:user.nickname
+            boardId,
+            nickname: user.nickname,
+            contents
         })
         console.log("contents 작성 완료")
         res.json(result)
@@ -19,6 +25,27 @@ router.post('/writes', authMiddleware, async(req, res)=> {
         console.log(err)
         result['status'] = 'fail'
     }
+
+})
+
+router.get('/writes', async(req, res)=> {
+    
+    let result = {status: 'success', boardData: []}
+    try{
+        let boardData = await Boards.find({}).sort({_id:-1}).limit(3);
+        for (board of boardData){
+            let temp={
+                boardId:board["boardId"],
+                nickname:board["nickname"],
+                contents:board["contents"]
+            }
+            result["boardData"].push(temp);
+        }
+    }catch(err){
+        console.log(err)
+        result['status'] = 'fail'
+    }
+    res.status(201).send({ board: result })
 
 })
 
