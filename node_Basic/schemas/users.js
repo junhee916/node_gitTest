@@ -12,6 +12,9 @@ const userSchema = new Schema({
     },
     nickname : {
         type: String,
+    },
+    profileImage:{
+        type: String 
     }
 })
 

@@ -6,10 +6,12 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
 router.post("/signUp", async (req, res) => {
-  const { names, nickname, password } = req.body;
+  const { names, nickname, password, profileImage } = req.body;
+
   await Users.create({
     names,
     nickname,
+    profileImage,
     password: bcrypt.hashSync(password, 10),
   });
 

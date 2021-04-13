@@ -28,16 +28,18 @@ router.post('/writes', authMiddleware, async(req, res)=> {
 
 })
 
-router.get('/writes', async(req, res)=> {
+router.get('/writes',authMiddleware, async(req, res)=> {
     
     let result = {status: 'success', boardData: []}
+    const user = res.locals.user
     try{
         let boardData = await Boards.find({}).sort({_id:-1}).limit(3);
         for (board of boardData){
             let temp={
                 boardId:board["boardId"],
                 nickname:board["nickname"],
-                contents:board["contents"]
+                contents:board["contents"],
+                profileImage:user.profileImage
             }
             result["boardData"].push(temp);
         }

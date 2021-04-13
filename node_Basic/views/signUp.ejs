@@ -20,6 +20,7 @@
         let names = $("#name").val()
         let nickname = $("#nickname").val()
         let password = $("#passwords").val()
+        let profileImage = 'https://lh3.googleusercontent.com/proxy/pC-JanhUBNcClZ_qdOaJGwydteoxvUT0rAMlrSkPJZD6Fe3EKdqt7KLuui8L5qBpHnaZ549MdTwb-6IvVBdc2kRcHts0heTYaZukEssimr2L1YnYsd1OstRNULvo5gXEmkGjS4gjc_Yz-PUs9vJRIGM_nO75dZQXrn4hCUmg6A'
 
         $.ajax({
           type: "POST",
@@ -28,6 +29,7 @@
               'names': names,
               'nickname': nickname,
               'password' : password,
+              'profileImage': profileImage
           },
           success: function (response) {
             

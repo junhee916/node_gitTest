@@ -41,6 +41,9 @@
       function boardView(){
         $.ajax({
           type: "GET",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           url: `/board/writes`,
           data: {
           },
@@ -50,8 +53,6 @@
             console.log(board)
 
             for(let i=0; i<board.length; i++){
-              console.log(board[i]["nickname"])
-              console.log(board[i]["_id"])
               
               let htmlTemp = `
               <div class="card" onclick="location.href='detail?boardId=${board[i]["boardId"]}'">
@@ -59,7 +60,7 @@
             <div class="media">
               <div class="media-left">
                 <figure class="image is-48x48">
-                  <img src="https://t1.daumcdn.net/cfile/tistory/99313E4E5AC2DEFD03" alt="Placeholder image">
+                  <img src="${board[i]["profileImage"]}" alt="Placeholder image">
                 </figure>
               </div>
               <div class="media-content">
@@ -82,6 +83,15 @@
         });
       }
 
+      function profileMove(){
+        if(localStorage.getItem("token")){
+          window.location.href="/profile"
+        }else{
+          alert("로그인 하시오.")
+          window.location.href="/board"
+        }
+      }
+
     </script>
   </head>
   <body>
@@ -89,6 +99,12 @@
       <div class="hero-body">
         <p class="title">Board</p>
         <p class="subtitle">일상을 기록하세요.</p>
+      </div>
+
+      <div class="tabs is-large" onclick="profileMove()">
+        <ul>
+          <li class="is-active" ><a>Profile</a></li>
+        </ul>
       </div>
     </section>
 

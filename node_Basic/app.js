@@ -12,13 +12,18 @@ connect()
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
+app.use('/uploads',express.static('uploads'))
+
 const userRouter = require('./routers/users')
 const boardRouter = require('./routers/boards')
 const detailRouter = require('./routers/detail')
+const profileRouter = require('./routers/profile')
 
 app.use('/user', [userRouter])
 app.use('/board', [boardRouter])
 app.use('/detail', [detailRouter])
+app.use('/profile', [profileRouter])
+
 
 //ejs setting 
 app.set('views', __dirname+'/views');
@@ -38,6 +43,10 @@ app.get('/board', (req, res)=> {
 
 app.get('/detail', (req, res)=> {
     res.render('detail')
+})
+
+app.get('/profile', (req, res)=>{
+    res.render('profile')
 })
 
 app.listen(port, ()=>{

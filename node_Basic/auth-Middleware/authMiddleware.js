@@ -13,11 +13,8 @@ module.exports = async(req, res, next) => {
 			return;
 		}
 		const { userId } = jwt.verify(tokenValue, 'junhee916');
-		console.log(jwt.verify(tokenValue, 'junhee916'))
-		console.log(userId)
-		console.log(tokenValue)
 
-		await User.findById(userId, { _id: true, names: true, nickname: true})
+		await User.findById(userId, { _id: true, names: true, nickname: true, profileImage:true})
 			.exec()
 			.then((user) => {
 				console.log(user)

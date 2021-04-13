@@ -43,6 +43,7 @@
       function boardUpdate(){
 
         let contents = $('#writes').val() 
+
         $.ajax({
           type: "PATCH",
           url: `/detail/${boardId}`,
@@ -50,15 +51,32 @@
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           data: {
-            contents: writes,
+            contents: contents,
           },
           success: function (response) {
-            window.location.href="/detail"
+            if(response["result"]=='success'){
+              window.location.href="/board"
+            }
           }
         });
       }
 
       function boardDelete(){
+
+        $.ajax({
+          type: "DELETE",
+          url: `/detail/${boardId}`,
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          data: {
+          },
+          success: function (response) {
+            if(response["result"]=='success'){
+              window.location.href="/board"
+            }
+          }
+        });
 
       }
 
